@@ -6,6 +6,7 @@ AllCops:
     - 'vendor/**/*'
     - 'node_modules/**/*'
     - 'bin/*'
+    - 'config/initializers/simple_form.rb'
   TargetRubyVersion: 2.5
 
 Layout/IndentFirstArrayElement:

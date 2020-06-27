@@ -1,0 +1,6 @@
+<h1>Save Image</h1>
+<br/>
+<%= simple_form_for @image do |f| %>
+  <%= f.input :url, label: "Image URL to save: ", input_html: { class: 'url_input' } %>
+  <%= f.button :submit, "Save image URL" %>
+<% end %>
