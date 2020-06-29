@@ -24,6 +24,8 @@ gem 'validate_url', '~> 1.0'
 
 gem 'simple_form', '~> 5.0'
 
+gem 'acts-as-taggable-on', '~> 6.5'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
