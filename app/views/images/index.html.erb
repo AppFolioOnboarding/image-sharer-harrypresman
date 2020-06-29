@@ -1,0 +1,13 @@
+
+<h1>Stored Image URLs</h1>
+<br/>
+<%= link_to 'Create Image', new_image_path %>
+<br/>
+<br/>
+<% @images.each do |image| %>
+  <div class='image'>
+    <div><%= image.url %></div>
+    <div><%= link_to 'Show', image_path(image) %></div>
+    <div><%= image_tag image.url %></div>
+  </div>
+<% end %>
