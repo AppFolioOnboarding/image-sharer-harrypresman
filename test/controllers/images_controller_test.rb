@@ -1,6 +1,25 @@
 require 'test_helper'
 
 class ImagesControllerTest < ActionDispatch::IntegrationTest
+  # root
+
+  test 'index page renders images in descending order' do
+    Image.create!([{ url: 'http://someurl', created_at: 1 }, { url: 'http://someurl2', created_at: 0 }])
+
+    get images_path
+
+    assert_response :ok
+
+    assert_select '.image' do |image_divs|
+      assert_select image_divs.first, 'img' do |imgs|
+        assert_equal 'http://someurl2', imgs.first[:src]
+      end
+      assert_select image_divs.last, 'img' do |imgs|
+        assert_equal 'http://someurl', imgs.first[:src]
+      end
+    end
+  end
+
   # images GET
 
   test 'get images is success' do
