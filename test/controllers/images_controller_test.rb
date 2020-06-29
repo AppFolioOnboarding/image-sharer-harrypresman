@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ImagesControllerTest < ActionDispatch::IntegrationTest
+class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   # root
 
   test 'index page renders images in descending order' do
@@ -50,8 +50,16 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_difference 'Image.count' do
       post images_path image: { url: 'http://someurl' }
     end
-    assert_equal 'http://someurl', Image.last.url
     assert_response :found
+    assert_equal 'http://someurl', Image.last.url
+  end
+
+  test 'creating an image with image tags should save image' do
+    assert_difference 'Image.count' do
+      post images_path image: { url: 'http://someurl', tag_list: 'a, b, c' }
+    end
+    assert_response :found
+    assert_equal %w[a b c], Image.last.tag_list
   end
 
   test 'creating an image should redirect to image page' do
@@ -71,6 +79,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
   test 'posting image with invalid url keeps user text as value' do
     post images_path image: { url: 'bad url' }
+    assert_response :ok
 
     assert_select '.url_input[value=?]', 'bad url'
   end
@@ -106,6 +115,24 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'displaying an image should show tag data' do
+    image = Image.create!(url: 'http://someurl', tag_list: 'some tags')
+    get image_path image
+
+    assert_response :ok
+
+    assert_select '.tag_list', /some tags/
+  end
+
+  test 'displaying an image with no tag data gives us bupkis' do
+    image = Image.create!(url: 'http://someurl')
+    get image_path image
+
+    assert_response :ok
+
+    assert_select '.tag_list', /NADA/
+  end
+
   # images/new
 
   test 'displaying new image form is success' do
@@ -119,10 +146,25 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
 
+    assert_select '.image_url'
+    assert_select 'form input[type=url][name=?]', 'image[url]'
+  end
+
+  test 'new image contains tags input field' do
+    get new_image_path
+
+    assert_response :ok
+
+    assert_select '.image_tag_list'
+    assert_select '.tag_list_input'
+  end
+
+  test 'new image allows form submission' do
+    get new_image_path
+
+    assert_response :ok
+
     assert_select 'form[action=?]', images_path
-    assert_select 'form input', 3 do
-      assert_select '[type=url][name=?]', 'image[url]'
-      assert_select '[type=submit][name=commit]'
-    end
+    assert_select 'form input[type=submit][name=commit]'
   end
 end
