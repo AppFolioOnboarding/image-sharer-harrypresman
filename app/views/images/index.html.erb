@@ -6,8 +6,8 @@
 <br/>
 <% @images.each do |image| %>
   <div class='image'>
-    <div><%= image.url %></div>
-    <div><%= link_to 'Show', image_path(image) %></div>
-    <div><%= image_tag image.url %></div>
+    <div><b>Image URL: </b><%= image.url %></div>
+    <div><%= link_to 'Show image', image_path(image) %></div>
+    <div><%= image_tag image.url, width: '400' %></div>
   </div>
 <% end %>
