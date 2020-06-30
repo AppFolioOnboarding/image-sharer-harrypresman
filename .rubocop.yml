@@ -7,6 +7,7 @@ AllCops:
     - 'node_modules/**/*'
     - 'bin/*'
     - 'config/initializers/simple_form.rb'
+    - 'db/migrate/*.acts_as_taggable_on_engine.rb'
   TargetRubyVersion: 2.5
 
 Layout/IndentFirstArrayElement:

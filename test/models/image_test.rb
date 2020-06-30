@@ -18,4 +18,16 @@ class ImageTest < ActiveSupport::TestCase
     assert_predicate image, :valid?
     assert_empty image.errors[:url]
   end
+
+  test 'image tags are optional' do
+    image = Image.new(url: 'https://www.imgur.com')
+    assert_predicate image, :valid?
+    assert_empty image.errors[:tag_list]
+  end
+
+  test 'image accepts tags parameters' do
+    image = Image.new(url: 'https://www.imgur.com', tag_list: 'a, b, c')
+    assert_predicate image, :valid?
+    assert_equal %w[a b c], image.tag_list
+  end
 end

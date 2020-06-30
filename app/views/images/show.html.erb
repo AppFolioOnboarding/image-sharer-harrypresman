@@ -1,5 +1,7 @@
 
 <div><%= link_to 'Back to image URLs', images_path %></div>
 <br>
+<div class='tag_list'><b>Image tags: </b><%= @image.tag_list.presence || 'NADA' %></div>
+<br>
 <div><%= image_tag @image.url %></div>
 
