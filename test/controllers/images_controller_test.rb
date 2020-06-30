@@ -20,6 +20,47 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     end
   end
 
+  test 'index page filters images based on tag' do
+    Image.create!([{ url: 'http://someurl', tag_list: %w[a b c] },
+                   { url: 'http://someurl2', tag_list: %w[c] }])
+
+    get images_path, params: { tag: %w[a b] }
+
+    assert_response :ok
+
+    assert_select '.image' do
+      assert_select('img') { |images| assert_equal 1, images.count }
+      assert_select 'img[src=?]', 'http://someurl'
+    end
+  end
+
+  test 'index page filters images based on any matching tag' do
+    Image.create!([{ url: 'http://someurl', tag_list: %w[a c] },
+                   { url: 'http://someurl2', tag_list: %w[c] },
+                   { url: 'http://someurl3', tag_list: %w[b c] }])
+
+    get images_path, params: { tag: %w[a b] }
+
+    assert_response :ok
+
+    assert_select '.image' do
+      assert_select('img') { |images| assert_equal 2, images.count }
+      assert_select 'img[src=?]', 'http://someurl'
+      assert_select 'img[src=?]', 'http://someurl3'
+    end
+  end
+
+  test 'index page should show empty image div if no images match tags' do
+    Image.create!([{ url: 'http://someurl' }])
+
+    get images_path, params: { tag: %w[a] }
+
+    assert_response :ok
+
+    assert_select '.empty_images'
+    assert_select '.image', false
+  end
+
   # images GET
 
   test 'get images is success' do
@@ -31,15 +72,47 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   test 'images page should show create images link' do
     get images_path
 
+    assert_response :ok
+
     assert_select 'a' do |a_tags|
       assert_equal 1, a_tags.length
       assert_equal new_image_path, a_tags.first[:href]
     end
   end
 
+  test 'images page should show tag selector with tags' do
+    Image.create!([{ url: 'http://someurl', tag_list: %w[a b] }])
+
+    get images_path
+
+    assert_response :ok
+
+    assert_select 'form' do
+      assert_select 'select'
+      assert_select 'option[value=a]'
+      assert_select 'option[value=b]'
+    end
+  end
+
+  test 'images page should show tag selector with tags from all images' do
+    Image.create!([{ url: 'http://someurl', tag_list: %w[a] }, { url: 'http://someurl2', tag_list: %w[b] }])
+
+    get images_path
+
+    assert_response :ok
+
+    assert_select 'form' do
+      assert_select 'select'
+      assert_select 'option[value=a]'
+      assert_select 'option[value=b]'
+    end
+  end
+
   test 'images page should display saved images' do
     Image.create!([{ url: 'http://someurl' }, { url: 'http://someurl2' }])
     get images_path
+
+    assert_response :ok
 
     assert_select('.image') { |images| assert_equal 2, images.count }
   end
