@@ -77,11 +77,18 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     assert_response :ok
   end
 
-  test 'posting image with invalid url keeps user text as value' do
+  test 'posting image with invalid url keeps user URL as value' do
     post images_path image: { url: 'bad url' }
     assert_response :ok
 
     assert_select '.url_input[value=?]', 'bad url'
+  end
+
+  test 'posting image with invalid url keeps user tags as value' do
+    post images_path image: { url: 'bad url', tag_list: 'a, b, c' }
+    assert_response :ok
+
+    assert_select '.tag_list_input[value=?]', 'a, b, c'
   end
 
   # images/:id
