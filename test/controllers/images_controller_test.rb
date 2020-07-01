@@ -239,6 +239,16 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     assert_redirected_to images_path
   end
 
+  test 'deleting an invalid images throws' do
+    assert_raise ActiveRecord::RecordNotFound do
+      delete image_path 1
+    end
+  end
+
+  test 'deleting images also deletes any associated image tags' do
+    skip 'todo'
+  end
+
   # images/new
 
   test 'displaying new image form is success' do
