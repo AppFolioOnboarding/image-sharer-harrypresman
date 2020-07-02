@@ -8,10 +8,6 @@ module PageObjects
       def tags
         element(locator: '.js-tag-list-text').node.text.gsub(/\s+/, '').split(',')
       end
-
-      def click_tag!(tag_name)
-        # TODO
-      end
     end
   end
 end

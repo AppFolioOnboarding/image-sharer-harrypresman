@@ -3,11 +3,12 @@ module PageObjects
     class IndexPage < PageObjects::Document
       path :images
 
-      collection :images, locator: '#js-found-images', item_locator: '.image', contains: ImageCard do
-        def view!
-          # TODO
-        end
-      end
+      collection :images, locator: '#js-found-images', item_locator: '.image', contains: ImageCard
+      # do
+      #   # def view!
+      #   #   # TODO
+      #   # end
+      # end
 
       def add_new_image!
         element(locator: '.js-create-image').node.click
@@ -20,8 +21,19 @@ module PageObjects
         end
       end
 
+      def click_tags!(tag_names)
+        tag_names.each do |tag_name|
+          node.find("option[value=#{tag_name}]").click
+        end
+        element(locator: '#js-filter-images').node.click
+        stale!
+        window.change_to(IndexPage)
+      end
+
       def clear_tag_filter!
-        # TODO
+        element(locator: '#js-filter-images').node.click
+        stale!
+        window.change_to(IndexPage)
       end
     end
   end

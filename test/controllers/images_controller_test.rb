@@ -87,10 +87,11 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
 
     assert_response :ok
 
-    assert_select 'form' do
+    assert_select '#js-filter-images-form' do
       assert_select 'select'
       assert_select 'option[value=a]'
       assert_select 'option[value=b]'
+      assert_select '#js-filter-images'
     end
   end
 
@@ -101,10 +102,11 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
 
     assert_response :ok
 
-    assert_select 'form' do
+    assert_select '#js-filter-images-form' do
       assert_select 'select'
       assert_select 'option[value=a]'
       assert_select 'option[value=b]'
+      assert_select '#js-filter-images'
     end
   end
 

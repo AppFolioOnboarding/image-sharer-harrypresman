@@ -71,7 +71,7 @@ class ImagesCrudTest < FlowTestCase
       assert images_index_page.showing_image?(url: url)
     end
 
-    images_index_page = images_index_page.images[1].click_tag!('cute')
+    images_index_page = images_index_page.click_tags!(%w[cute])
 
     assert_equal 2, images_index_page.images.count
     assert_not images_index_page.showing_image?(url: cat_url)

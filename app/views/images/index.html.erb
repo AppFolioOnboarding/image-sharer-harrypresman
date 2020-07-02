@@ -5,9 +5,9 @@
 <br>
 <br>
 <h2>Filter images based on tags:</h2>
-<%= form_tag images_path, method: :get do %>
+<%= form_tag images_path, id: 'js-filter-images-form', method: :get do %>
   <div><%= select_tag('tag', options_for_select(@tags), multiple: true) %></div>
-  <div><%= submit_tag 'Filter Images' %></div>
+  <div><%= submit_tag 'Filter Images', id: 'js-filter-images' %></div>
 <% end %>
 <br>
 <br>
