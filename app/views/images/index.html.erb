@@ -2,12 +2,22 @@
 <h1>Stored Image URLs</h1>
 <br/>
 <%= link_to 'Create Image', new_image_path %>
-<br/>
-<br/>
+<br>
+<br>
+<h2>Filter images based on tags:</h2>
+<%= form_tag images_path, method: :get do %>
+  <div><%= select_tag('tag', options_for_select(@tags), multiple: true) %></div>
+  <div><%= submit_tag 'Filter Images' %></div>
+<% end %>
+<br>
+<br>
+<h2>Images:</h2>
+<div class='empty_images'><b><%= 'No Images Found!' if @images.empty? %></b></div>
 <% @images.each do |image| %>
   <div class='image'>
     <div><b>Image URL: </b><%= image.url %></div>
     <div><%= link_to 'Show image', image_path(image) %></div>
     <div><%= image_tag image.url, width: '400' %></div>
+    <div><%= image.tag_list %></div>
   </div>
 <% end %>
