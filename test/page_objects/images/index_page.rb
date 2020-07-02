@@ -17,6 +17,7 @@ module PageObjects
 
       def add_new_image!
         element(locator: '.js-create-image').node.click
+        stale!
         window.change_to(NewPage)
       end
 

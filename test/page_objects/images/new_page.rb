@@ -7,8 +7,8 @@ module PageObjects
       path :images
 
       form_for :image do
-        element :url, locator: '.url_input'
-        element :tag_list, locator: '.tag_list_input'
+        element :url
+        element :tag_list
       end
 
       def create_image!(url_input: nil, tags: nil)
