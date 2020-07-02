@@ -12,12 +12,13 @@ module PageObjects
       end
 
       def delete
-        # TODO
+        element(locator: '#js-delete-image-button').node.click
         yield node.driver.browser.switch_to.alert
       end
 
       def delete_and_confirm!
-        # TODO
+        delete(&:accept)
+        stale!
         window.change_to(IndexPage)
       end
 

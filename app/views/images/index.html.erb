@@ -17,7 +17,7 @@
   <% @images.each do |image| %>
     <div class='image'>
       <div><b>Image URL: </b><%= image.url %></div>
-      <div><%= link_to 'Show image', image_path(image) %></div>
+      <div><%= link_to 'Show image', image_path(image), class: 'js-image-link' %></div>
       <div><%= image_tag image.url, width: '400' %></div>
       <div class='js-tag-list-text'><%= image.tag_list %></div>
     </div>
