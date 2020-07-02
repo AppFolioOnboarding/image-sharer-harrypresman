@@ -4,11 +4,11 @@ module PageObjects
       path :image
 
       def image_url
-        # TODO
+        element(locator: :img).node[:src]
       end
 
       def tags
-        # TODO
+        element(locator: '.js-tag-list-text').node.text.gsub(/\s+/, '').split(',')
       end
 
       def delete
@@ -22,7 +22,7 @@ module PageObjects
       end
 
       def go_back_to_index!
-        # TODO
+        IndexPage.visit
       end
     end
   end
