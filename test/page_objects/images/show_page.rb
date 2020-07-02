@@ -1,3 +1,5 @@
+require 'page_objects/images/index_page'
+
 module PageObjects
   module Images
     class ShowPage < PageObjects::Document
