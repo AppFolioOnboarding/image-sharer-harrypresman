@@ -1,7 +1,7 @@
 
 <div><%= link_to 'Back to image URLs', images_path %></div>
+<div><%= button_to 'Delete Image', image_path, id: 'js-delete-image-button', method: :delete, data: { confirm: 'Are you sure?'} %></div>
 <br>
-<div class='tag_list'><b>Image tags: </b><%= @image.tag_list.presence || 'NADA' %></div>
+<div class='tag_list'><b>Image tags: </b><span class='js-tag-list-text'><%= @image.tag_list.presence || 'NADA' %></span></div>
 <br>
 <div><%= image_tag @image.url %></div>
-

@@ -87,10 +87,11 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
 
     assert_response :ok
 
-    assert_select 'form' do
+    assert_select '#js-filter-images-form' do
       assert_select 'select'
       assert_select 'option[value=a]'
       assert_select 'option[value=b]'
+      assert_select '#js-filter-images'
     end
   end
 
@@ -101,10 +102,11 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
 
     assert_response :ok
 
-    assert_select 'form' do
+    assert_select '#js-filter-images-form' do
       assert_select 'select'
       assert_select 'option[value=a]'
       assert_select 'option[value=b]'
+      assert_select '#js-filter-images'
     end
   end
 
@@ -184,6 +186,18 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     end
   end
 
+  test 'image page contains delete button with confirmation dialog' do
+    image = Image.create!(url: 'http://someurl')
+    get image_path image
+
+    assert_response :ok
+
+    assert_select '.button_to' do
+      assert_select 'input[type=submit]'
+      assert_select 'input[data-confirm]'
+    end
+  end
+
   test 'displaying an image should show image data' do
     image = Image.create!(url: 'http://someurl')
     get image_path image
@@ -211,6 +225,30 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     assert_response :ok
 
     assert_select '.tag_list', /NADA/
+  end
+
+  # images/:id DELETE
+
+  test 'deleting images is success' do
+    image = Image.create!(url: 'http://someurl')
+
+    delete image_path image.id
+
+    refute Image.exists?(image.id)
+
+    assert_response :found
+
+    assert_redirected_to images_path
+  end
+
+  test 'deleting an invalid images throws' do
+    assert_raise ActiveRecord::RecordNotFound do
+      delete image_path 1
+    end
+  end
+
+  test 'deleting images also deletes any associated image tags' do
+    skip 'todo'
   end
 
   # images/new

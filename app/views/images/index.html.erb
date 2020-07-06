@@ -1,23 +1,25 @@
 
 <h1>Stored Image URLs</h1>
 <br/>
-<%= link_to 'Create Image', new_image_path %>
+<%= link_to 'Create Image', new_image_path, class: 'js-create-image' %>
 <br>
 <br>
 <h2>Filter images based on tags:</h2>
-<%= form_tag images_path, method: :get do %>
+<%= form_tag images_path, id: 'js-filter-images-form', method: :get do %>
   <div><%= select_tag('tag', options_for_select(@tags), multiple: true) %></div>
-  <div><%= submit_tag 'Filter Images' %></div>
+  <div><%= submit_tag 'Filter Images', id: 'js-filter-images' %></div>
 <% end %>
 <br>
 <br>
 <h2>Images:</h2>
 <div class='empty_images'><b><%= 'No Images Found!' if @images.empty? %></b></div>
-<% @images.each do |image| %>
-  <div class='image'>
-    <div><b>Image URL: </b><%= image.url %></div>
-    <div><%= link_to 'Show image', image_path(image) %></div>
-    <div><%= image_tag image.url, width: '400' %></div>
-    <div><%= image.tag_list %></div>
-  </div>
-<% end %>
+<div id='js-found-images'>
+  <% @images.each do |image| %>
+    <div class='image'>
+      <div><b>Image URL: </b><%= image.url %></div>
+      <div><%= link_to 'Show image', image_path(image), class: 'js-image-link' %></div>
+      <div><%= image_tag image.url, width: '400' %></div>
+      <div class='js-tag-list-text'><%= image.tag_list %></div>
+    </div>
+  <% end %>
+</div>
