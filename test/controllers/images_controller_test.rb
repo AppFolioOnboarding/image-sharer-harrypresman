@@ -4,7 +4,8 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   # root
 
   test 'index page renders images in descending order' do
-    Image.create!([{ url: 'http://someurl', created_at: 1 }, { url: 'http://someurl2', created_at: 0 }])
+    Image.create!([{ url: 'http://someurl', tag_list: 'yada yada', created_at: 1 },
+                   { url: 'http://someurl2', tag_list: 'yada yada', created_at: 0 }])
 
     get images_path
 
@@ -51,7 +52,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   end
 
   test 'index page should show empty image div if no images match tags' do
-    Image.create!([{ url: 'http://someurl' }])
+    Image.create!(url: 'http://someurl', tag_list: 'yada yada')
 
     get images_path, params: { tag: %w[a] }
 
@@ -81,7 +82,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   end
 
   test 'images page should show tag selector with tags' do
-    Image.create!([{ url: 'http://someurl', tag_list: %w[a b] }])
+    Image.create!(url: 'http://someurl', tag_list: %w[a b])
 
     get images_path
 
@@ -111,7 +112,8 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   end
 
   test 'images page should display saved images' do
-    Image.create!([{ url: 'http://someurl' }, { url: 'http://someurl2' }])
+    Image.create!([{ url: 'http://someurl', tag_list: 'yada yada' },
+                   { url: 'http://someurl2', tag_list: 'yada yada' }])
     get images_path
 
     assert_response :ok
@@ -123,7 +125,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
 
   test 'creating an image should save image' do
     assert_difference 'Image.count' do
-      post images_path image: { url: 'http://someurl' }
+      post images_path image: { url: 'http://someurl', tag_list: 'yada yada' }
     end
     assert_response :found
     assert_equal 'http://someurl', Image.last.url
@@ -138,7 +140,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   end
 
   test 'creating an image should redirect to image page' do
-    post images_path image: { url: 'http://someurl' }
+    post images_path image: { url: 'http://someurl', tag_list: 'yada yada' }
 
     assert_response :found
     assert_redirected_to image_path Image.last
@@ -169,14 +171,14 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   # images/:id
 
   test 'displaying an image is success' do
-    image = Image.create!(url: 'http://someurl')
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
     get image_path image
 
     assert_response :ok
   end
 
   test 'image page contains back link' do
-    image = Image.create!(url: 'http://someurl')
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
     get image_path image
 
     assert_response :ok
@@ -187,7 +189,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   end
 
   test 'image page contains delete button with confirmation dialog' do
-    image = Image.create!(url: 'http://someurl')
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
     get image_path image
 
     assert_response :ok
@@ -199,7 +201,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   end
 
   test 'displaying an image should show image data' do
-    image = Image.create!(url: 'http://someurl')
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
     get image_path image
 
     assert_response :ok
@@ -218,19 +220,10 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     assert_select '.tag_list', /some tags/
   end
 
-  test 'displaying an image with no tag data gives us bupkis' do
-    image = Image.create!(url: 'http://someurl')
-    get image_path image
-
-    assert_response :ok
-
-    assert_select '.tag_list', /NADA/
-  end
-
   # images/:id DELETE
 
   test 'deleting images is success' do
-    image = Image.create!(url: 'http://someurl')
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
 
     delete image_path image.id
 
