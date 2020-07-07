@@ -2,6 +2,6 @@
 <br/>
 <%= simple_form_for @image do |f| %>
   <%= f.input :url, label: "Image URL to save: ", input_html: { class: 'url_input' } %>
-  <%= f.input :tag_list, label: "Optional image tags: ", input_html: { class: 'tag_list_input', value: f.object.tag_list.join(", ") } %>
+  <%= f.input :tag_list, label: "Image tags: ", input_html: { class: 'tag_list_input', value: f.object.tag_list.join(", ") } %>
   <%= f.button :submit, "Save image URL" %>
 <% end %>
