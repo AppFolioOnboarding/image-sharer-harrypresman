@@ -213,11 +213,20 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
 
   test 'displaying an image should show tag data' do
     image = Image.create!(url: 'http://someurl', tag_list: 'some tags')
+
     get image_path image
 
     assert_response :ok
-
     assert_select '.tag_list', /some tags/
+  end
+
+  test 'image page contains edit button for tag list' do
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
+
+    get image_path image
+
+    assert_response :ok
+    assert_select '#js-edit-image-button'
   end
 
   # images/:id DELETE
@@ -277,5 +286,76 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
 
     assert_select 'form[action=?]', images_path
     assert_select 'form input[type=submit][name=commit]'
+  end
+
+  # images/:id/edit
+
+  test 'edit image is success' do
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
+
+    get edit_image_path image.id
+
+    assert_response 200
+  end
+
+  test 'edit image contains tags input field' do
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
+
+    get edit_image_path image.id
+
+    assert_response :ok
+    assert_select '.image_tag_list'
+    assert_select '#js-tag-list-input'
+  end
+
+  test 'edit image allows form submission' do
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
+
+    get edit_image_path image.id
+
+    assert_response :ok
+    assert_select 'form[action=?]', image_path, image.id
+    assert_select 'form input[type=submit][name=commit]'
+  end
+
+  test 'edit image form displays existing tag list before editing' do
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
+
+    get edit_image_path image.id
+
+    assert_response :ok
+    assert_select '#js-tag-list-input[value=?]', 'yada yada'
+  end
+
+  test 'edit image redirects to index page if image does not exist' do
+    get edit_image_path 42
+
+    assert_redirected_to images_path
+  end
+
+  # PATCH images/:id
+
+  test 'posting image with valid tags will update image and show it' do
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
+
+    patch image_path image.id, image: { tag_list: 'new tags' }
+
+    assert_response :found
+    assert_redirected_to image_path, image.id
+  end
+
+  test 'posting image with invalid tags will not update' do
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
+
+    patch image_path image.id, image: { tag_list: '' }
+
+    assert_response :ok
+    assert_select '.error', "can't be blank"
+  end
+
+  test 'posting image redirects to index page if image does not exist' do
+    patch image_path 42, image: { tag_list: '' }
+
+    assert_redirected_to images_path
   end
 end

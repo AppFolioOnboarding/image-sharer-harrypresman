@@ -14,10 +14,14 @@ class ImagesController < ApplicationController
 
   def edit
     @image = Image.find_by(id: params[:id])
+    redirect_to images_path if @image.nil?
   end
 
   def update
     @image = Image.find_by(id: params[:id])
+
+    return redirect_to images_path if @image.nil?
+
     if @image.update(tag_list: params[:image][:tag_list])
       redirect_to @image
     else

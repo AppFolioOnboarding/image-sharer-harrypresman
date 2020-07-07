@@ -1,6 +1,6 @@
 <h3>Edit Image</h3>
 <br>
 <%= simple_form_for @image do |f| %>
-  <%= f.input :tag_list, label: "New image tags: ", input_html: { class: 'js-tag-list-input', value: f.object.tag_list.join(", ") } %>
+  <%= f.input :tag_list, label: "New image tags: ", input_html: { id: 'js-tag-list-input', value: f.object.tag_list.join(", ") } %>
   <%= f.button :submit, "Save new image tags" %>
 <% end %>
