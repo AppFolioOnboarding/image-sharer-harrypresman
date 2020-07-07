@@ -250,7 +250,15 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   end
 
   test 'deleting images also deletes any associated image tags' do
-    skip 'todo'
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
+
+    delete image_path image.id
+    get images_path
+
+    assert_response :ok
+    assert_select '#js-filter-images-form' do
+      assert_select 'option[value=?]', 'yada yada', 0
+    end
   end
 
   # images/new

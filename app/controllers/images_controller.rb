@@ -46,8 +46,6 @@ class ImagesController < ApplicationController
     @image = Image.find(params[:id])
     @image.destroy!
 
-    # TODO: delete image tags from db as well
-
     redirect_to images_path
   end
 
