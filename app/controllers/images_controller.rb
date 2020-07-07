@@ -12,6 +12,19 @@ class ImagesController < ApplicationController
     @image = Image.new
   end
 
+  def edit
+    @image = Image.find_by(id: params[:id])
+  end
+
+  def update
+    @image = Image.find_by(id: params[:id])
+    if @image.update(tag_list: params[:image][:tag_list])
+      redirect_to @image
+    else
+      render 'edit'
+    end
+  end
+
   def create
     @image = Image.new(image_params)
     if @image.save
