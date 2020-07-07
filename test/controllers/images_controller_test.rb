@@ -298,6 +298,15 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
     assert_response 200
   end
 
+  test 'edit image should display image' do
+    image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
+
+    get edit_image_path image
+
+    assert_response :ok
+    assert_select 'img[src=?]', 'http://someurl'
+  end
+
   test 'edit image contains tags input field' do
     image = Image.create!(url: 'http://someurl', tag_list: 'yada yada')
 
