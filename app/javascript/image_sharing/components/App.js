@@ -10,6 +10,7 @@ class App extends Component {
       <div>
         <Header title={'Tell us what you think'} />
         /* Put your components here: Flash Message, Form, Footer */
+        <Footer />
       </div>
     )
   }
