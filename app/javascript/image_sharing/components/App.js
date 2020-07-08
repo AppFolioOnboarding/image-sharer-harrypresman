@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject } from 'mobx-react';
 import Header from './Header';
+import FeedbackForm from "./FeedbackForm";
 import Footer from './Footer';
 
 class App extends Component {
@@ -9,7 +10,7 @@ class App extends Component {
     return (
       <div>
         <Header title="Tell us what you think" />
-        {/* Put your components here: Flash Message, Form, Footer */}
+        <FeedbackForm />
         <Footer />
       </div>
     );
