@@ -151,20 +151,20 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
       post images_path image: { url: '' }
     end
     assert_nil Image.last
-    assert_response :ok
+    assert_response :unprocessable_entity
   end
 
   test 'posting image with invalid url keeps user URL as value' do
     post images_path image: { url: 'bad url' }
-    assert_response :ok
 
+    assert_response :unprocessable_entity
     assert_select '.url_input[value=?]', 'bad url'
   end
 
   test 'posting image with invalid url keeps user tags as value' do
     post images_path image: { url: 'bad url', tag_list: 'a, b, c' }
-    assert_response :ok
 
+    assert_response :unprocessable_entity
     assert_select '.tag_list_input[value=?]', 'a, b, c'
   end
 
@@ -366,7 +366,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
 
     patch image_path image.id, image: { tag_list: '' }
 
-    assert_response :ok
+    assert_response :unprocessable_entity
     assert_select '.error', "can't be blank"
   end
 

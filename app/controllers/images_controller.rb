@@ -25,7 +25,7 @@ class ImagesController < ApplicationController
     if @image.update(tag_list: params[:image][:tag_list])
       redirect_to @image
     else
-      render 'edit'
+      render 'edit', status: 422
     end
   end
 
@@ -34,7 +34,7 @@ class ImagesController < ApplicationController
     if @image.save
       redirect_to @image
     else
-      render 'new'
+      render 'new', status: 422
     end
   end
 
