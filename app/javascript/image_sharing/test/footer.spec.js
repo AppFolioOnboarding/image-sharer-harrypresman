@@ -2,8 +2,9 @@
 
 import { assert } from 'chai';
 import { shallow } from 'enzyme';
-import React from 'react'
-import Footer from '../components/footer'
+import React from 'react';
+
+import Footer from '../components/Footer';
 
 describe('footer', () => {
   it('displays copyright text', () => {

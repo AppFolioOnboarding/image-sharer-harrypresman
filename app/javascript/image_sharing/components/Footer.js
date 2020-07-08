@@ -6,7 +6,7 @@ class Footer extends Component {
       <div>
         <h4 className='text-center'>Copyright: Appfolio Inc. Onboarding</h4>
       </div>
-    )
+    );
   }
 }
 
