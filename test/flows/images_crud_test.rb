@@ -25,6 +25,38 @@ class ImagesCrudTest < FlowTestCase
     assert images_index_page.showing_image?(url: image_url, tags: tags)
   end
 
+  test 'edit an image' do
+    images_index_page = PageObjects::Images::IndexPage.visit
+
+    new_image_page = images_index_page.add_new_image!
+
+    image_url = 'https://media3.giphy.com/media/EldfH1VJdbrwY/200.gif'
+    tags = %w[foo bar]
+    image_show_page = new_image_page.create_image!(
+      url_input: image_url,
+      tags: tags.join(', ')
+    ).as_a(PageObjects::Images::ShowPage)
+
+    image_edit_page = image_show_page.edit!
+
+    assert image_edit_page.tags? tags
+
+    image_edit_page = image_edit_page.edit_tags!
+
+    assert image_edit_page.is_a? PageObjects::Images::EditPage
+    assert_equal "can't be blank", image_edit_page.tag_list.error_message
+
+    new_tags = %w[newfoo newbar]
+    image_show_page = image_edit_page.edit_tags!(tags: new_tags)
+
+    assert image_show_page.is_a? PageObjects::Images::ShowPage
+    assert_equal new_tags, image_show_page.tags
+
+    images_index_page = image_show_page.go_back_to_index!
+
+    assert images_index_page.showing_image?(url: image_url, tags: new_tags)
+  end
+
   test 'delete an image' do
     cute_puppy_url = 'http://ghk.h-cdn.co/assets/16/09/980x490/landscape-1457107485-gettyimages-512366437.jpg'
     ugly_cat_url = 'http://www.ugly-cat.com/ugly-cats/uglycat041.jpg'

@@ -1,4 +1,5 @@
 require 'page_objects/images/index_page'
+require 'page_objects/images/edit_page'
 
 module PageObjects
   module Images
@@ -11,6 +12,12 @@ module PageObjects
 
       def tags
         element(locator: '.js-tag-list-text').node.text.gsub(/\s+/, '').split(',')
+      end
+
+      def edit!
+        node.click_button('Edit image tags')
+        stale!
+        window.change_to(EditPage)
       end
 
       def delete

@@ -12,12 +12,29 @@ class ImagesController < ApplicationController
     @image = Image.new
   end
 
+  def edit
+    @image = Image.find_by(id: params[:id])
+    redirect_to images_path if @image.nil?
+  end
+
+  def update
+    @image = Image.find_by(id: params[:id])
+
+    return redirect_to images_path if @image.nil?
+
+    if @image.update(tag_list: params[:image][:tag_list])
+      redirect_to @image
+    else
+      render 'edit', status: 422
+    end
+  end
+
   def create
     @image = Image.new(image_params)
     if @image.save
       redirect_to @image
     else
-      render 'new'
+      render 'new', status: 422
     end
   end
 
@@ -28,8 +45,6 @@ class ImagesController < ApplicationController
   def destroy
     @image = Image.find(params[:id])
     @image.destroy!
-
-    # TODO: delete image tags from db as well
 
     redirect_to images_path
   end
