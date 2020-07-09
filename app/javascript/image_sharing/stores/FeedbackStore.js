@@ -1,5 +1,6 @@
-export class FeedbackStore {
-  /* Implement your feedback store*/
-}
+import { observable } from 'mobx';
 
-export default FeedbackStore;
+export default class FeedbackStore {
+  @observable name = '';
+  @observable comment = '';
+}
