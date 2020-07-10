@@ -19,7 +19,7 @@ describe('FeedbackStore', () => {
   it('allows writes and reads to name field', () => {
     const feedbackStore = new FeedbackStore();
 
-    feedbackStore.name = 'Cloud';
+    feedbackStore.setName('Cloud');
 
     assert.equal(feedbackStore.name, 'Cloud');
   });
@@ -27,7 +27,7 @@ describe('FeedbackStore', () => {
   it('allows writes and reads to comment field', () => {
     const feedbackStore = new FeedbackStore();
 
-    feedbackStore.comment = 'Go White Sox';
+    feedbackStore.setComment('Go White Sox');
 
     assert.equal(feedbackStore.comment, 'Go White Sox');
   });
